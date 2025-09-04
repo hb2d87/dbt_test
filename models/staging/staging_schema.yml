@@ -1,0 +1,139 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Staging table for customers with enhanced location data - Customer Data Platform (CDP) foundation"
+    columns:
+      - name: customer_id
+        description: "Primary key - unique identifier for each order-customer relationship"
+        tests:
+          - not_null
+      - name: customer_key
+        description: "Unique customer identifier across all orders (customer_unique_id)"
+        tests:
+          - not_null
+      - name: city
+        description: "Customer city"
+      - name: state
+        description: "Customer state abbreviation"
+      - name: latitude
+        description: "Customer location latitude (from geolocation)"
+      - name: longitude
+        description: "Customer location longitude (from geolocation)"
+
+  - name: stg_sellers
+    description: "Staging table for sellers with enhanced location data"
+    columns:
+      - name: seller_id
+        description: "Primary key - unique identifier for each seller"
+        tests:
+          - unique
+          - not_null
+      - name: city
+        description: "Seller city"
+      - name: state
+        description: "Seller state abbreviation"
+      - name: latitude
+        description: "Seller location latitude (from geolocation)"
+      - name: longitude
+        description: "Seller location longitude (from geolocation)"
+
+  - name: stg_orders
+    description: "Staging table for orders with comprehensive order details, customer info, and payment totals"
+    columns:
+      - name: order_id
+        description: "Primary key - unique identifier for each order"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customers"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: order_status
+        description: "Raw order status from source system"
+      - name: order_status_grouped
+        description: "Standardized order status (completed, cancelled, processing, etc.)"
+      - name: cancellation_reason
+        description: "Reason for order cancellation (if applicable)"
+      - name: delivered_on_time
+        description: "Boolean indicating if order was delivered on or before estimated date"
+      - name: days_to_delivery
+        description: "Number of days from order to delivery"
+      - name: total_payment_value
+        description: "Total amount paid for the order"
+      - name: voucher_value
+        description: "Total value of vouchers used for the order (0 if no vouchers)"
+      - name: customer_city
+        description: "Customer's city"
+      - name: customer_state
+        description: "Customer's state"
+
+  - name: stg_order_payments
+    description: "Staging table for order payments with payment type categorization"
+    columns:
+      - name: order_id
+        description: "Foreign key to orders"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: payment_type
+        description: "Raw payment method type"
+      - name: payment_type_display
+        description: "Human-readable payment method"
+      - name: payment_category
+        description: "High-level payment category (card, bank_transfer, voucher, other)"
+      - name: payment_value
+        description: "Payment amount"
+        tests:
+          - not_null
+      - name: payment_installments
+        description: "Number of payment installments"
+      - name: installment_category
+        description: "Categorized installment terms (single, short-term, medium-term, long-term)"
+
+  - name: stg_order_items
+    description: "Staging table for order items with product details, categories, and seller information"
+    columns:
+      - name: order_id
+        description: "Foreign key to orders"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: product_id
+        description: "Foreign key to products"
+        tests:
+          - not_null
+      - name: seller_id
+        description: "Foreign key to sellers"
+        tests:
+          - relationships:
+              to: ref('stg_sellers')
+              field: seller_id
+      - name: item_price
+        description: "Price of individual item"
+      - name: freight_value
+        description: "Shipping cost for item"
+      - name: total_item_value
+        description: "Total cost including item price and freight"
+      - name: category_english
+        description: "Product category in English"
+      - name: category_portuguese
+        description: "Original product category in Portuguese"
+      - name: weight_category
+        description: "Categorized product weight (light, medium, heavy)"
+      - name: size_category
+        description: "Categorized product size (small, medium, large)"
+      - name: price_category
+        description: "Categorized item price (low, medium, high, premium)"
+      - name: seller_city
+        description: "Seller's city"
+      - name: seller_state
+        description: "Seller's state"

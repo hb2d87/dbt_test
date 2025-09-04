@@ -1,0 +1,175 @@
+version: 2
+
+sources:
+  - name: olist_raw
+    description: "Brazilian E-Commerce Dataset by Olist - Raw data tables"
+    database: postgres
+    schema: ecommerce_test
+    tables:
+      - name: orders
+        description: "Core dataset with order information including order status, timestamps, and customer details"
+        columns:
+          - name: order_id
+            description: "Unique identifier for each order"
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key to customers table"
+            tests:
+              - not_null
+          - name: order_status
+            description: "Current status of the order (delivered, shipped, etc.)"
+          - name: order_purchase_timestamp
+            description: "Timestamp when the order was placed"
+          - name: order_approved_at
+            description: "Timestamp when the order was approved"
+          - name: order_delivered_carrier_date
+            description: "Timestamp when order was delivered to carrier"
+          - name: order_delivered_customer_date
+            description: "Timestamp when order was delivered to customer"
+          - name: order_estimated_delivery_date
+            description: "Estimated delivery date communicated to customer"
+
+      - name: order_items
+        description: "Items purchased within each order, including product and seller details"
+        columns:
+          - name: order_id
+            description: "Foreign key to orders table"
+            tests:
+              - not_null
+          - name: order_item_id
+            description: "Sequential number identifying each item within an order"
+          - name: product_id
+            description: "Foreign key to products table"
+            tests:
+              - not_null
+          - name: seller_id
+            description: "Foreign key to sellers table"
+          - name: shipping_limit_date
+            description: "Seller shipping limit date for handling the order"
+          - name: price
+            description: "Item price"
+          - name: freight_value
+            description: "Item freight value"
+
+      - name: order_payments
+        description: "Payment options and installment details for orders"
+        columns:
+          - name: order_id
+            description: "Foreign key to orders table"
+            tests:
+              - not_null
+          - name: payment_sequential
+            description: "Sequential number for payments within an order"
+          - name: payment_type
+            description: "Payment method (credit_card, boleto, etc.)"
+          - name: payment_installments
+            description: "Number of installments"
+          - name: payment_value
+            description: "Payment amount"
+
+      - name: order_reviews
+        description: "Customer reviews and ratings for orders"
+        columns:
+          - name: review_id
+            description: "Unique identifier for each review"
+            tests:
+              - unique
+              - not_null
+          - name: order_id
+            description: "Foreign key to orders table"
+            tests:
+              - not_null
+          - name: review_score
+            description: "Rating given by customer (1-5 scale)"
+          - name: review_comment_title
+            description: "Review title written by customer"
+          - name: review_comment_message
+            description: "Review message written by customer"
+          - name: review_creation_date
+            description: "Timestamp when review was created"
+          - name: review_answer_timestamp
+            description: "Timestamp when review was answered"
+
+      - name: products
+        description: "Product catalog with attributes and category information"
+        columns:
+          - name: product_id
+            description: "Unique identifier for each product"
+            tests:
+              - unique
+              - not_null
+          - name: product_category_name
+            description: "Product category name in Portuguese"
+          - name: product_name_lenght
+            description: "Number of characters in product name"
+          - name: product_description_lenght
+            description: "Number of characters in product description"
+          - name: product_photos_qty
+            description: "Number of product photos"
+          - name: product_weight_g
+            description: "Product weight in grams"
+          - name: product_length_cm
+            description: "Product length in centimeters"
+          - name: product_height_cm
+            description: "Product height in centimeters"
+          - name: product_width_cm
+            description: "Product width in centimeters"
+
+      - name: sellers
+        description: "Seller information including location data"
+        columns:
+          - name: seller_id
+            description: "Unique identifier for each seller"
+            tests:
+              - unique
+              - not_null
+          - name: seller_zip_code_prefix
+            description: "First 5 digits of seller zip code"
+          - name: seller_city
+            description: "Seller city name"
+          - name: seller_state
+            description: "Seller state abbreviation"
+
+      - name: customers
+        description: "Customer information including location data"
+        columns:
+          - name: customer_id
+            description: "Unique identifier for each customer"
+            tests:
+              - unique
+              - not_null
+          - name: customer_unique_id
+            description: "Unique identifier for customer (one customer may have multiple customer_ids)"
+          - name: customer_zip_code_prefix
+            description: "First 5 digits of customer zip code"
+          - name: customer_city
+            description: "Customer city name"
+          - name: customer_state
+            description: "Customer state abbreviation"
+
+      - name: geolocation
+        description: "Brazilian zip codes with latitude and longitude coordinates"
+        columns:
+          - name: geolocation_zip_code_prefix
+            description: "First 5 digits of zip code"
+          - name: geolocation_lat
+            description: "Latitude coordinate"
+          - name: geolocation_lng
+            description: "Longitude coordinate"
+          - name: geolocation_city
+            description: "City name"
+          - name: geolocation_state
+            description: "State abbreviation"
+
+      - name: product_category_name_translation
+        description: "Translation mapping from Portuguese to English product categories"
+        columns:
+          - name: product_category_name
+            description: "Product category name in Portuguese"
+            tests:
+              - unique
+              - not_null
+          - name: product_category_name_english
+            description: "Product category name in English"
