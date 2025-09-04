@@ -6,7 +6,7 @@ with orders_raw as (
 
 order_payments as (
     select 
-        order_id,
+        order_id, 
         sum(payment_value) as total_payment_value,
         sum(case when payment_type = 'voucher' then payment_value else 0 end) as voucher_value,
         count(distinct payment_type) as payment_methods_count,
