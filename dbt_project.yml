@@ -26,10 +26,6 @@ models:
     # Configuration for staging models
     staging:
       +materialized: table
-      
-    # Configuration for mart models (when you create them)
-    marts:
-      +materialized: table
 
 # Global variables you can use across your project
 vars:

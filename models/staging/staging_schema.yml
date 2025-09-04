@@ -80,8 +80,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_orders')
-              field: order_id
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
       - name: payment_type
         description: "Raw payment method type"
       - name: payment_type_display
