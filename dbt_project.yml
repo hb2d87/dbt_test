@@ -1,13 +1,12 @@
-
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'ecommerce_test'
+name: 'olist_analytics'
 version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'default'
+profile: 'olist_analytics'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -19,24 +18,78 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt clean`
+clean-targets:
   - "target"
   - "dbt_packages"
 
-
 # Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In dbt, the default materialization for a model is a view. This means, when you run 
-# dbt run or dbt build, all of your models will be built as a view in your data platform. 
-# The configuration below will override this setting for models in the example folder to 
-# instead be materialized as tables. Any models you add to the root of the models folder will 
-# continue to be built as views. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
-
+# Full documentation: https://docs.getdbt.com/reference/model-configs
 models:
-  my_new_project:
-    # Applies to all files under models/example/
-    example:
+  olist_analytics:
+    # Configuration for staging models
+    staging:
+      +materialized: view
+      +docs:
+        node_color: "lightblue"
+      # Staging models use views for fresh data and fast builds
+      
+    # Configuration for mart models (when you create them)
+    marts:
       +materialized: table
+      +docs:
+        node_color: "lightgreen"
+      # Mart models use tables for performance
+      
+      # Sub-configurations for different mart areas
+      core:
+        +materialized: table
+        # Core business entities (customers, orders, products)
+        
+      finance:
+        +materialized: table
+        # Revenue, payments, profitability analysis
+        
+      marketing:
+        +materialized: table
+        # Customer segments, acquisition, retention
+        
+      operations:
+        +materialized: table
+        # Fulfillment, shipping, seller performance
+
+# Global variables you can use across your project
+vars:
+  # Date variables for incremental models (when you implement them later)
+  start_date: '2016-01-01'
+  end_date: '2018-12-31'
+  
+  # Business logic variables
+  on_time_delivery_threshold_days: 30
+  high_value_order_threshold: 200
+  
+  # Geographic focus (if you want to filter to specific states)
+  # focus_states: ['SP', 'RJ', 'MG']
+
+# Seeds configuration (for lookup tables, if needed)
+seeds:
+  olist_analytics:
+    +column_types:
+      # You can specify column types for seed files here
+      # Example: zip_code: varchar(10)
+
+# Snapshots configuration (for slowly changing dimensions, when needed)
+snapshots:
+  olist_analytics:
+    +target_database: postgres
+    +target_schema: snapshots
+    +strategy: timestamp
+    +updated_at: updated_at
+
+# Test configurations
+tests:
+  +store_failures: true
+  +store_failures_as: table
+
+# Documentation configuration
+docs:
+  +node_color: "orange"
