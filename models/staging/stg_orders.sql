@@ -8,6 +8,7 @@ order_payments as (
     select 
         order_id,
         sum(payment_value) as total_payment_value,
+        sum(case when payment_type = 'voucher' then payment_value else 0 end) as voucher_value,
         count(distinct payment_type) as payment_methods_count,
         string_agg(distinct payment_type, ', ') as payment_types
     from {{ source('olist_raw', 'order_payments') }}
@@ -18,7 +19,7 @@ customers as (
     select * from {{ ref('stg_customers') }}
 ),
 
-orders_enhanced as (
+orders_final as (
     select
         -- Primary identifiers
         o.order_id,
@@ -39,7 +40,7 @@ orders_enhanced as (
             else 'other'
         end as order_status_grouped,
         
-        -- Cancellation reason (inferred from status)
+        -- Cancellation reason
         case 
             when o.order_status = 'canceled' then 'customer_cancelled'
             when o.order_status = 'unavailable' then 'product_unavailable'
@@ -55,13 +56,19 @@ orders_enhanced as (
         
         -- Delivery performance
         case 
-            when o.order_delivered_customer_date is not null and o.order_estimated_delivery_date is not null
-            then o.order_delivered_customer_date <= o.order_estimated_delivery_date
+            when o.order_delivered_customer_date is not null 
+                 and o.order_estimated_delivery_date is not null
+            then case 
+                when o.order_delivered_customer_date <= o.order_estimated_delivery_date 
+                then true 
+                else false 
+            end
             else null
         end as delivered_on_time,
         
         case 
-            when o.order_delivered_customer_date is not null and o.order_purchase_timestamp is not null
+            when o.order_delivered_customer_date is not null 
+                 and o.order_purchase_timestamp is not null
             then extract(day from (o.order_delivered_customer_date - o.order_purchase_timestamp))
             else null
         end as days_to_delivery,
@@ -85,4 +92,4 @@ orders_enhanced as (
     left join order_payments p on o.order_id = p.order_id
 )
 
-select * from orders_enhanced
+select * from orders_final
