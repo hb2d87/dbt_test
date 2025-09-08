@@ -12,10 +12,6 @@ category_translation as (
     select * from {{ source('olist_raw', 'product_category_name_translation') }}
 ),
 
-sellers as (
-    select * from {{ ref('stg_sellers') }}
-),
-
 order_items_enhanced as (
     select
         -- Foreign keys
@@ -61,10 +57,6 @@ order_items_enhanced as (
             else 'unknown'
         end as size_category,
         
-        -- Seller information
-        s.city as seller_city,
-        s.state as seller_state,
-        
         -- Price analysis
         case 
             when oi.price < 20 then 'low'
@@ -83,7 +75,6 @@ order_items_enhanced as (
     from order_items_raw oi
     left join products p on oi.product_id = p.product_id
     left join category_translation ct on p.product_category_name = ct.product_category_name
-    left join sellers s on oi.seller_id = s.seller_id
 )
 
 select * from order_items_enhanced
