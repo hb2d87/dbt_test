@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: mart_daily
+  - name: mrt_daily
     description: "Daily customer activity metrics aggregated by geographic location"
     columns:
       - name: customer_state
@@ -47,7 +47,7 @@ models:
         data_tests:
           - not_null
 
-  - name: mart_weekly
+  - name: mrt_weekly
     description: "Weekly customer activity metrics aggregated by geographic location"
     columns:
       - name: customer_state
@@ -58,7 +58,7 @@ models:
         description: "Customer's city location"
         data_tests:
           - not_null
-      - name: week_start_date
+      - name: activity_date
         description: "Start date of the week (Monday) when customer activity occurred"
         data_tests:
           - not_null
@@ -93,7 +93,7 @@ models:
         data_tests:
           - not_null
 
-  - name: mart_monthly
+  - name: mrt_monthly
     description: "Monthly customer activity metrics aggregated by geographic location"
     columns:
       - name: customer_state
@@ -104,7 +104,7 @@ models:
         description: "Customer's city location"
         data_tests:
           - not_null
-      - name: month_start_date
+      - name: activity_date
         description: "Start date of the month when customer activity occurred"
         data_tests:
           - not_null
