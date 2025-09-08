@@ -20,7 +20,7 @@ with customer_daily_summary as (
         -- Financial metrics
         sum(total_payment_value_sum) as total_payment_value_sum,
         sum(voucher_value_sum) as voucher_value_sum,
-        sum(total_payment_value_sum) - sum(voucher_value_sum) as net_payment_value,
+        sum(total_payment_value_sum) - sum(voucher_value_sum) as net_payment_value
         
     from {{ ref('int_customer_daily_activity') }}
     group by 
