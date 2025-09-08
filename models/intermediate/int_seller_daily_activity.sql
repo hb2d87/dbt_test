@@ -28,6 +28,14 @@ with seller_daily_performance as (
         sum(oi.freight_value) as total_freight_revenue,
         sum(oi.total_item_value) as total_order_value,
         
+        -- Performance metrics
+        avg(oi.item_price) as avg_item_price,
+        avg(oi.freight_value) as avg_freight_value,
+        
+        -- Product diversity
+        count(distinct oi.product_id) as unique_products_sold,
+        count(distinct oi.category_english) as unique_categories_sold
+        
     from {{ ref('stg_order_items') }} oi
     inner join {{ ref('stg_orders') }} o on oi.order_id = o.order_id
     where o.order_purchase_timestamp is not null
