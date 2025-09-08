@@ -1,7 +1,15 @@
 {{ config(materialized='table') }}
 
 with orders_raw as (
-    select * from {{ source('olist_raw', 'orders') }}
+    select order_id
+    , customer_id
+    , order_status
+    , order_purchase_timestamp
+    , order_approved_at
+    , order_delivered_carrier_date
+    , order_delivered_customer_date
+    , order_estimated_delivery_date
+    from {{ source('olist_raw', 'orders') }}
 ),
 
 order_payments as (
@@ -9,14 +17,17 @@ order_payments as (
         order_id, 
         sum(payment_value) as total_payment_value,
         sum(case when payment_type = 'voucher' then payment_value else 0 end) as voucher_value,
-        count(distinct payment_type) as payment_methods_count,
-        string_agg(distinct payment_type, ', ') as payment_types
+        count(distinct payment_type) as payment_methods_count
     from {{ source('olist_raw', 'order_payments') }}
     group by order_id
 ),
 
 customers as (
-    select * from {{ ref('stg_customers') }}
+    select customer_id
+    , customer_unique_id
+    , customer_city
+    , customer_state 
+    from {{ source('olist_raw', 'customers') }}
 ),
 
 orders_final as (
@@ -24,7 +35,7 @@ orders_final as (
         -- Primary identifiers
         o.order_id,
         o.customer_id,
-        c.customer_key,
+        c.customer_unique_id,
         
         -- Order status and classification
         o.order_status,
@@ -39,13 +50,6 @@ orders_final as (
             when o.order_status = 'created' then 'created'
             else 'other'
         end as order_status_grouped,
-        
-        -- Cancellation reason
-        case 
-            when o.order_status = 'canceled' then 'customer_cancelled'
-            when o.order_status = 'unavailable' then 'product_unavailable'
-            else null
-        end as cancellation_reason,
         
         -- Timestamps
         o.order_purchase_timestamp,
@@ -76,16 +80,11 @@ orders_final as (
         -- Customer location
         c.city as customer_city,
         c.state as customer_state,
-        c.zip_code_prefix as customer_zip_code_prefix,
         
         -- Payment information
         coalesce(p.total_payment_value, 0) as total_payment_value,
         coalesce(p.voucher_value, 0) as voucher_value,
-        p.payment_methods_count,
-        p.payment_types,
-        
-        -- Metadata
-        current_timestamp as created_at
+        p.payment_methods_count
         
     from orders_raw o
     left join customers c on o.customer_id = c.customer_id
