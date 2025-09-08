@@ -78,8 +78,8 @@ orders_final as (
         end as days_to_delivery,
         
         -- Customer location
-        c.city as customer_city,
-        c.state as customer_state,
+        c.customer_city,
+        c.customer_state,
         
         -- Payment information
         coalesce(p.total_payment_value, 0) as total_payment_value,
