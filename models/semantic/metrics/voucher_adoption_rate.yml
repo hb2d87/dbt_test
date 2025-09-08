@@ -1,0 +1,131 @@
+metrics:
+  - name: voucher_adoption_rate
+    description: "Percentage of transactions using vouchers - promotional effectiveness indicator"
+    type: ratio
+    label: "Voucher Adoption Rate"
+    type_params:
+      numerator: voucher_value
+      denominator: total_payments
+    
+    meta:
+      responsible: "Marketing Analytics Team"
+      accountable: "VP of Marketing"
+      consulted: ["Customer Success", "Pricing Team", "Finance Team"]
+      informed: ["Executive Team", "Regional Marketing Teams", "Campaign Managers"]
+      
+      business_purpose: "Measure customer engagement with promotional campaigns"
+      business_impact: "Medium - Campaign optimization and customer acquisition strategy"
+      kpi_type: "Marketing Effectiveness Metric"
+      
+      supported_grains: ["day", "week", "month", "quarter"]
+      
+      frequency: "Daily tracking, weekly trending"
+      sla_refresh: "Daily by 10 AM BRT"
+      data_freshness: "T+1 day"
+      
+      calculation_logic: "Voucher value as percentage of total payment value"
+      business_rule: "Higher rates indicate strong promotional engagement"
+      
+      target_ranges:
+        optimal_range: "10-20%"
+        campaign_peak: "25-40% during major promotions"
+        baseline_minimum: "> 5%"
+      
+      validation_rules:
+        - "Must be >= 0%"
+        - "Cannot exceed 100%"
+        - "Should spike during known campaign periods"
+      
+      data_quality_owner: "Marketing Data Team"
+      market: "Brazilian E-commerce"
+      currency: "BRL (Brazilian Real)"
+      timezone: "America/Sao_Paulo"
+      format: "percentage"
+      
+      related_metrics:
+        - "Customer acquisition cost"
+        - "Marketing campaign ROI"
+        - "Discount redemption rate"
+      responsible: "Marketing Analytics Team"
+      accountable: "VP of Marketing"
+      consulted: ["Customer Success", "Pricing Team", "Finance Team"]
+      informed: ["Executive Team", "Regional Marketing Teams", "Campaign Managers"]
+      
+      business_purpose: "Measure customer engagement with promotional campaigns"
+      business_impact: "Medium - Campaign optimization and customer acquisition strategy"
+      kpi_type: "Marketing Effectiveness Metric"
+      
+      supported_grains: ["day", "week", "month", "quarter"]
+      
+      frequency: "Daily tracking, weekly trending"
+      sla_refresh: "Daily by 10 AM BRT"
+      data_freshness: "T+1 day"
+      
+      calculation_logic: "Voucher value as percentage of total payment value"
+      business_rule: "Higher rates indicate strong promotional engagement"
+      
+      target_ranges:
+        optimal_range: "10-20%"
+        campaign_peak: "25-40% during major promotions"
+        baseline_minimum: "> 5%"
+      
+      validation_rules:
+        - "Must be >= 0%"
+        - "Cannot exceed 100%"
+        - "Should spike during known campaign periods"
+      
+      data_quality_owner: "Marketing Data Team"
+      market: "Brazilian E-commerce"
+      currency: "BRL (Brazilian Real)"
+      timezone: "America/Sao_Paulo"
+      
+      related_metrics:
+        - "Customer acquisition cost"
+        - "Marketing campaign ROI"
+        - "Discount redemption rate"
+    
+    dimensions:
+      - customer_state
+      - customer_city
+      - activity_date
+    
+    format: percentage
+    
+    meta:
+      responsible: "Marketing Analytics Team"
+      accountable: "VP of Marketing"
+      consulted: ["Customer Success", "Pricing Team", "Finance Team"]
+      informed: ["Executive Team", "Regional Marketing Teams", "Campaign Managers"]
+      
+      business_purpose: "Measure customer engagement with promotional campaigns"
+      business_impact: "Medium - Campaign optimization and customer acquisition strategy"
+      kpi_type: "Marketing Effectiveness Metric"
+      
+      supported_grains: ["day", "week", "month", "quarter"]
+      
+      frequency: "Daily tracking, weekly trending"
+      sla_refresh: "Daily by 10 AM BRT"
+      data_freshness: "T+1 day"
+      
+      calculation_logic: "Voucher value as percentage of total payment value"
+      business_rule: "Higher rates indicate strong promotional engagement"
+      
+      target_ranges:
+        optimal_range: "10-20%"
+        campaign_peak: "25-40% during major promotions"
+        baseline_minimum: "> 5%"
+      
+      validation_rules:
+        - "Must be >= 0%"
+        - "Cannot exceed 100%"
+        - "Should spike during known campaign periods"
+      
+      data_quality_owner: "Marketing Data Team"
+      market: "Brazilian E-commerce"
+      currency: "BRL (Brazilian Real)"
+      timezone: "America/Sao_Paulo"
+      
+      related_metrics:
+        - "Customer acquisition cost"
+        - "Marketing campaign ROI"
+        - "Discount redemption rate"

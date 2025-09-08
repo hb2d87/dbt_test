@@ -1,0 +1,53 @@
+semantic_models:
+ - name: customer_activity_base
+   description: "Base semantic model for Brazilian e-commerce customer activity metrics"
+   model: ref('int_customer_daily_activity')
+   
+   defaults:
+     agg_time_dimension: activity_date
+   
+   entities:
+     - name: customer_unique_id
+       type: primary
+       description: "Unique customer identifier across all orders"
+   
+   dimensions:
+     - name: customer_state
+       type: categorical
+       description: "Customer's state location for geographic analysis"
+     
+     - name: customer_city
+       type: categorical
+       description: "Customer's city location for detailed geographic analysis"
+     
+     - name: activity_date
+       type: time
+       description: "Date when customer activity occurred - supports day/week/month/quarter grains"
+       type_params:
+         time_granularity: day
+   
+   measures:
+     - name: unique_customers
+       description: "Count of distinct customers"
+       agg: count_distinct
+       expr: customer_unique_id
+     
+     - name: total_orders_created
+       description: "Sum of orders created"
+       agg: sum
+       expr: order_created_count
+     
+     - name: total_orders_completed
+       description: "Sum of orders completed"
+       agg: sum
+       expr: order_done_count
+     
+     - name: total_payment_value
+       description: "Sum of total payment values"
+       agg: sum
+       expr: total_payment_value_sum
+     
+     - name: total_voucher_value
+       description: "Sum of voucher values used"
+       agg: sum
+       expr: voucher_value_sum

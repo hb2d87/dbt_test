@@ -1,0 +1,96 @@
+metrics:
+  - name: total_payments
+    description: "Sum of total payment values - primary revenue metric for Brazilian e-commerce"
+    type: simple
+    label: "Total Payments"
+    type_params:
+      measure: total_payment_value
+    
+    meta:
+      responsible: "Finance Analytics Team"
+      accountable: "CFO"
+      consulted: ["Revenue Operations", "Accounting Team", "Tax Team"]
+      informed: ["CEO", "Board of Directors", "Regional Sales Managers", "Investor Relations"]
+      
+      business_purpose: "Track daily revenue performance and cash flow patterns for Brazilian market"
+      business_impact: "Critical - Primary revenue metric for financial operations"
+      kpi_type: "Financial KPI"
+      
+      supported_grains: ["day", "week", "month", "quarter"]
+      
+      frequency: "Real-time monitoring, daily reporting"
+      sla_refresh: "Daily by 8 AM BRT"
+      data_freshness: "Real-time (within 15 minutes of transaction)"
+      
+      calculation_logic: "Sum of all successful payments received on transaction date"
+      exclusions: 
+        - "Refunded payments"
+        - "Failed/declined transactions"
+        - "Pending payments"
+      inclusions: "All completed payment transactions"
+      
+      target_ranges:
+        daily_healthy: "R$ 500,000 - R$ 2,000,000"
+        monthly_growth: "20-30% YoY"
+        seasonal_variance: "±20% from quarterly average"
+      
+      validation_rules:
+        - "Must be >= 0"
+        - "Daily total should reconcile with payment processor reports"
+        - "Should match accounting system within 0.1% variance"
+      
+      data_quality_owner: "Finance Data Team"
+      market: "Brazilian E-commerce"
+      currency: "BRL (Brazilian Real)"
+      timezone: "America/Sao_Paulo"
+      format: "currency"
+      
+      compliance:
+        sox_compliance: true
+        gaap_compliant: true
+        external_audit_required: true
+        audit_trail: "Required for financial reporting"
+        retention_period: "7 years (regulatory requirement)"
+      responsible: "Finance Analytics Team"
+      accountable: "CFO"
+      consulted: ["Revenue Operations", "Accounting Team", "Tax Team"]
+      informed: ["CEO", "Board of Directors", "Regional Sales Managers", "Investor Relations"]
+      
+      business_purpose: "Track daily revenue performance and cash flow patterns for Brazilian market"
+      business_impact: "Critical - Primary revenue metric for financial operations"
+      kpi_type: "Financial KPI"
+      
+      supported_grains: ["day", "week", "month", "quarter"]
+      
+      frequency: "Real-time monitoring, daily reporting"
+      sla_refresh: "Daily by 8 AM BRT"
+      data_freshness: "Real-time (within 15 minutes of transaction)"
+      
+      calculation_logic: "Sum of all successful payments received on transaction date"
+      exclusions: 
+        - "Refunded payments"
+        - "Failed/declined transactions"
+        - "Pending payments"
+      inclusions: "All completed payment transactions"
+      
+      target_ranges:
+        daily_healthy: "R$ 500,000 - R$ 2,000,000"
+        monthly_growth: "20-30% YoY"
+        seasonal_variance: "±20% from quarterly average"
+      
+      validation_rules:
+        - "Must be >= 0"
+        - "Daily total should reconcile with payment processor reports"
+        - "Should match accounting system within 0.1% variance"
+      
+      data_quality_owner: "Finance Data Team"
+      market: "Brazilian E-commerce"
+      currency: "BRL (Brazilian Real)"
+      timezone: "America/Sao_Paulo"
+      
+      compliance:
+        sox_compliance: true
+        gaap_compliant: true
+        external_audit_required: true
+        audit_trail: "Required for financial reporting"
+        retention_period: "7 years (regulatory requirement)"
