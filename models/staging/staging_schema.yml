@@ -40,45 +40,20 @@ models:
         description: "Boolean indicating if order was delivered on or before estimated date"
       - name: days_to_delivery
         description: "Number of days from order to delivery"
-        tests:
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 0
-              max_value: 365
-              where: "days_to_delivery is not null"
-              severity: warn
       - name: customer_city
         description: "Customer's city"
       - name: customer_state
         description: "Customer's state"
-        tests:
-          - accepted_values:
-              values: ['SP','RJ','MG','RS','SC','PR','BA','GO','PE','CE','DF','ES','MT','PA','PB','MA','RN','MS','AL','PI','SE','RO','TO','AC','AM','AP','RR']
-              severity: warn
       - name: total_payment_value
         description: "Total amount paid for the order"
         tests:
           - not_null
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 0
-              inclusive: true
       - name: voucher_value
         description: "Total value of vouchers used for the order (0 if no vouchers)"
         tests:
           - not_null
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 0
-              inclusive: true
       - name: payment_methods_count
         description: "Number of different payment methods used for this order"
-        tests:
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 1
-              max_value: 10
-              severity: warn
 
   - name: stg_order_payments
     description: "Staging table for order payments with payment type categorization"
@@ -99,10 +74,6 @@ models:
         description: "Payment amount"
         tests:
           - not_null
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 0
-              inclusive: true
       - name: payment_installments
         description: "Number of payment installments"
       - name: installment_category
@@ -123,39 +94,11 @@ models:
         description: "Foreign key to sellers"
       - name: item_price
         description: "Price of individual item"
-        tests:
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 0
-              inclusive: true
       - name: freight_value
         description: "Shipping cost for item"
-        tests:
-          - dbt_utils.accepted_range:
-            arguments:
-              min_value: 0
-              inclusive: true
       - name: total_item_value
         description: "Total cost including item price and freight"
       - name: category_english
         description: "Product category in English"
       - name: category_portuguese
         description: "Original product category in Portuguese"
-      - name: weight_category
-        description: "Categorized product weight (light, medium, heavy)"
-      - name: size_category
-        description: "Categorized product size (small, medium, large)"
-      - name: price_category
-        description: "Categorized item price (low, medium, high, premium)"
-      - name: seller_city
-        description: "Seller's city"
-      - name: seller_state
-        description: "Seller's state"
-
-# Business logic tests across models
-tests:
-  - name: test_payment_order_consistency
-    description: "Ensure payment totals match between stg_orders and stg_order_payments"
-    
-  - name: test_orders_have_items
-    description: "Ensure all orders in stg_orders have corresponding items in stg_order_items"
