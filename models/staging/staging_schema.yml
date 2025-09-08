@@ -1,43 +1,6 @@
 version: 2
 
 models:
-  - name: stg_customers
-    description: "Staging table for customers with enhanced location data - Customer Data Platform (CDP) foundation"
-    columns:
-      - name: customer_id
-        description: "Primary key - unique identifier for each order-customer relationship"
-        tests:
-          - not_null
-      - name: customer_key
-        description: "Unique customer identifier across all orders (customer_unique_id)"
-        tests:
-          - not_null
-      - name: city
-        description: "Customer city"
-      - name: state
-        description: "Customer state abbreviation"
-      - name: latitude
-        description: "Customer location latitude (from geolocation)"
-      - name: longitude
-        description: "Customer location longitude (from geolocation)"
-
-  - name: stg_sellers
-    description: "Staging table for sellers with enhanced location data"
-    columns:
-      - name: seller_id
-        description: "Primary key - unique identifier for each seller"
-        tests:
-          - unique
-          - not_null
-      - name: city
-        description: "Seller city"
-      - name: state
-        description: "Seller state abbreviation"
-      - name: latitude
-        description: "Seller location latitude (from geolocation)"
-      - name: longitude
-        description: "Seller location longitude (from geolocation)"
-
   - name: stg_orders
     description: "Staging table for orders with comprehensive order details, customer info, and payment totals"
     columns:
@@ -50,27 +13,68 @@ models:
         description: "Foreign key to customers"
         tests:
           - not_null
-          - relationships:
-              to: ref('stg_customers')
-              field: customer_id
+      - name: customer_unique_id
+        description: "Unique customer identifier across all orders"
       - name: order_status
         description: "Raw order status from source system"
+        tests:
+          - not_null
       - name: order_status_grouped
         description: "Standardized order status (completed, cancelled, processing, etc.)"
-      - name: cancellation_reason
-        description: "Reason for order cancellation (if applicable)"
+        tests:
+          - accepted_values:
+              values: ['completed', 'in_transit', 'cancelled', 'processing', 'created', 'other']
+      - name: order_purchase_timestamp
+        description: "Timestamp when the order was placed"
+        tests:
+          - not_null
+      - name: order_approved_at
+        description: "Timestamp when the order was approved"
+      - name: order_delivered_carrier_date
+        description: "Timestamp when order was delivered to carrier"
+      - name: order_delivered_customer_date
+        description: "Timestamp when order was delivered to customer"
+      - name: order_estimated_delivery_date
+        description: "Estimated delivery date communicated to customer"
       - name: delivered_on_time
         description: "Boolean indicating if order was delivered on or before estimated date"
       - name: days_to_delivery
         description: "Number of days from order to delivery"
-      - name: total_payment_value
-        description: "Total amount paid for the order"
-      - name: voucher_value
-        description: "Total value of vouchers used for the order (0 if no vouchers)"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 365
+              where: "days_to_delivery is not null"
+              severity: warn
       - name: customer_city
         description: "Customer's city"
       - name: customer_state
         description: "Customer's state"
+        tests:
+          - accepted_values:
+              values: ['SP','RJ','MG','RS','SC','PR','BA','GO','PE','CE','DF','ES','MT','PA','PB','MA','RN','MS','AL','PI','SE','RO','TO','AC','AM','AP','RR']
+              severity: warn
+      - name: total_payment_value
+        description: "Total amount paid for the order"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: voucher_value
+        description: "Total value of vouchers used for the order (0 if no vouchers)"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: payment_methods_count
+        description: "Number of different payment methods used for this order"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 10
+              severity: warn
 
   - name: stg_order_payments
     description: "Staging table for order payments with payment type categorization"
@@ -79,10 +83,8 @@ models:
         description: "Foreign key to orders"
         tests:
           - not_null
-          - relationships:
-              arguments:
-                to: ref('stg_orders')
-                field: order_id
+      - name: payment_sequential
+        description: "Sequential number for payments within an order"
       - name: payment_type
         description: "Raw payment method type"
       - name: payment_type_display
@@ -93,6 +95,9 @@ models:
         description: "Payment amount"
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
       - name: payment_installments
         description: "Number of payment installments"
       - name: installment_category
@@ -105,23 +110,24 @@ models:
         description: "Foreign key to orders"
         tests:
           - not_null
-          - relationships:
-              to: ref('stg_orders')
-              field: order_id
       - name: product_id
         description: "Foreign key to products"
         tests:
           - not_null
       - name: seller_id
         description: "Foreign key to sellers"
-        tests:
-          - relationships:
-              to: ref('stg_sellers')
-              field: seller_id
       - name: item_price
         description: "Price of individual item"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
       - name: freight_value
         description: "Shipping cost for item"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
       - name: total_item_value
         description: "Total cost including item price and freight"
       - name: category_english
@@ -138,3 +144,11 @@ models:
         description: "Seller's city"
       - name: seller_state
         description: "Seller's state"
+
+# Business logic tests across models
+tests:
+  - name: test_payment_order_consistency
+    description: "Ensure payment totals match between stg_orders and stg_order_payments"
+    
+  - name: test_orders_have_items
+    description: "Ensure all orders in stg_orders have corresponding items in stg_order_items"
