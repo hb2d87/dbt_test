@@ -1,0 +1,112 @@
+version: 2
+
+models:
+  - name: int_customer_daily_activity
+    description: "Daily aggregated customer activity metrics including order counts, payment values, and voucher usage"
+    columns:
+      - name: customer_unique_id
+        description: "Unique customer identifier across all orders"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Customer ID for the specific order"
+        tests:
+          - not_null
+      - name: customer_city
+        description: "Customer's city location"
+      - name: customer_state
+        description: "Customer's state location"
+      - name: activity_date
+        description: "Date when customer activity occurred (from order_purchase_timestamp)"
+        tests:
+          - not_null
+      - name: order_created_count
+        description: "Total number of orders created by customer on this date"
+        tests:
+          - not_null
+      - name: order_paid_count
+        description: "Number of orders that were paid (completed, in_transit, or processing status)"
+        tests:
+          - not_null
+      - name: order_done_count
+        description: "Number of orders that were completed on this date"
+        tests:
+          - not_null
+      - name: total_payment_value_sum
+        description: "Total payment amount across all orders for this customer on this date"
+        tests:
+          - not_null
+      - name: voucher_value_sum
+        description: "Total voucher value used by customer on this date"
+        tests:
+          - not_null
+
+  - name: int_product_category_daily_activity
+    description: "Daily aggregated product and category sales metrics including items sold and revenue"
+    columns:
+      - name: product_id
+        description: "Unique product identifier"
+        tests:
+          - not_null
+      - name: category_english
+        description: "Product category name in English"
+      - name: activity_date
+        description: "Date when product sales activity occurred (from order_purchase_timestamp)"
+        tests:
+          - not_null
+      - name: items_sold_count
+        description: "Number of individual items sold for this product on this date"
+        tests:
+          - not_null
+      - name: total_item_price
+        description: "Sum of item prices (excluding shipping) for this product on this date"
+        tests:
+          - not_null
+      - name: total_freight_value
+        description: "Sum of shipping costs for this product on this date"
+        tests:
+          - not_null
+      - name: total_item_value_sum
+        description: "Total value including both item price and freight for this product on this date"
+        tests:
+          - not_null
+
+  - name: int_seller_daily_activity
+    description: "Daily aggregated seller performance metrics including order counts, delivery performance, and revenue"
+    columns:
+      - name: seller_id
+        description: "Unique seller identifier"
+        tests:
+          - not_null
+      - name: activity_date
+        description: "Date when seller activity occurred (from order_purchase_timestamp)"
+        tests:
+          - not_null
+      - name: orders_received_count
+        description: "Number of distinct orders received by seller on this date"
+        tests:
+          - not_null
+      - name: items_sold_count
+        description: "Total number of individual items sold by seller on this date"
+        tests:
+          - not_null
+      - name: items_delivered_count
+        description: "Number of items from completed orders by seller on this date"
+        tests:
+          - not_null
+      - name: items_in_progress_count
+        description: "Number of items from in-transit or processing orders by seller on this date"
+        tests:
+          - not_null
+      - name: total_item_revenue
+        description: "Sum of item prices (seller's core revenue) for this date"
+        tests:
+          - not_null
+      - name: total_freight_revenue
+        description: "Sum of shipping charges collected by seller for this date"
+        tests:
+          - not_null
+      - name: total_order_value
+        description: "Total value including both item prices and shipping for seller on this date"
+        tests:
+          - not_null
