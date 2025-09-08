@@ -1,0 +1,31 @@
+# models/metrics/voucher_adoption_rate_metric.yml
+version: 2
+
+metrics:
+  - name: voucher_adoption_rate
+    description: "Percentage of transactions using vouchers - promotional effectiveness indicator"
+    type: ratio
+    label: "Voucher Adoption Rate"
+    type_params:
+      numerator: voucher_value
+      denominator: total_payment_value
+    
+    config:
+      meta:
+        responsible: "Marketing Analytics Team"
+        accountable: "VP of Marketing"
+        business_purpose: "Measure customer engagement with promotional campaigns"
+        business_impact: "Medium - Campaign optimization and customer acquisition strategy"
+        kpi_type: "Marketing Effectiveness Metric"
+        target_ranges:
+          optimal_range: "10-20%"
+          campaign_peak: "25-40% during major promotions"
+          baseline_minimum: "> 5%"
+        validation_rules:
+          - "Must be >= 0%"
+          - "Cannot exceed 100%"
+          - "Should spike during known campaign periods"
+        market: "Brazilian E-commerce"
+        currency: "BRL (Brazilian Real)"
+        timezone: "America/Sao_Paulo"
+        format: "percentage"

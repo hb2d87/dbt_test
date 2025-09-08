@@ -26,6 +26,8 @@ models:
     # Configuration for staging models
     staging:
       +materialized: table
+    semantic_models:
+      +enabled: true
 
 # Global variables you can use across your project
 vars:
