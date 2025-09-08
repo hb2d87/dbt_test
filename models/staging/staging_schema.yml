@@ -42,6 +42,7 @@ models:
         description: "Number of days from order to delivery"
         tests:
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 0
               max_value: 365
               where: "days_to_delivery is not null"
@@ -59,6 +60,7 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 0
               inclusive: true
       - name: voucher_value
@@ -66,12 +68,14 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 0
               inclusive: true
       - name: payment_methods_count
         description: "Number of different payment methods used for this order"
         tests:
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 1
               max_value: 10
               severity: warn
@@ -96,6 +100,7 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 0
               inclusive: true
       - name: payment_installments
@@ -120,12 +125,14 @@ models:
         description: "Price of individual item"
         tests:
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 0
               inclusive: true
       - name: freight_value
         description: "Shipping cost for item"
         tests:
           - dbt_utils.accepted_range:
+            arguments:
               min_value: 0
               inclusive: true
       - name: total_item_value
