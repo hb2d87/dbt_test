@@ -1,0 +1,140 @@
+version: 2
+
+models:
+  - name: mart_daily
+    description: "Daily customer activity metrics aggregated by geographic location"
+    columns:
+      - name: customer_state
+        description: "Customer's state location"
+        data_tests:
+          - not_null
+      - name: customer_city
+        description: "Customer's city location"
+        data_tests:
+          - not_null
+      - name: activity_date
+        description: "Date when customer activity occurred"
+        data_tests:
+          - not_null
+      - name: date_granulation
+        description: "Granularity level identifier - 'daily'"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['daily']
+      - name: active_users_count
+        description: "Number of unique customers active in this location on this date"
+        data_tests:
+          - not_null
+      - name: order_created_count
+        description: "Total number of orders created in this location on this date"
+        data_tests:
+          - not_null
+      - name: order_done_count
+        description: "Total number of orders completed in this location on this date"
+        data_tests:
+          - not_null
+      - name: total_payment_value_sum
+        description: "Total payment amount across all orders for this location and date"
+        data_tests:
+          - not_null
+      - name: voucher_value_sum
+        description: "Total voucher value used in this location on this date"
+        data_tests:
+          - not_null
+      - name: net_payment_value
+        description: "Total payment value minus voucher discounts (actual revenue)"
+        data_tests:
+          - not_null
+
+  - name: mart_weekly
+    description: "Weekly customer activity metrics aggregated by geographic location"
+    columns:
+      - name: customer_state
+        description: "Customer's state location"
+        data_tests:
+          - not_null
+      - name: customer_city
+        description: "Customer's city location"
+        data_tests:
+          - not_null
+      - name: week_start_date
+        description: "Start date of the week (Monday) when customer activity occurred"
+        data_tests:
+          - not_null
+      - name: date_granulation
+        description: "Granularity level identifier - 'weekly'"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['weekly']
+      - name: active_users_count
+        description: "Number of unique customers active in this location during this week"
+        data_tests:
+          - not_null
+      - name: order_created_count
+        description: "Total number of orders created in this location during this week"
+        data_tests:
+          - not_null
+      - name: order_done_count
+        description: "Total number of orders completed in this location during this week"
+        data_tests:
+          - not_null
+      - name: total_payment_value_sum
+        description: "Total payment amount across all orders for this location and week"
+        data_tests:
+          - not_null
+      - name: voucher_value_sum
+        description: "Total voucher value used in this location during this week"
+        data_tests:
+          - not_null
+      - name: net_payment_value
+        description: "Total payment value minus voucher discounts (actual weekly revenue)"
+        data_tests:
+          - not_null
+
+  - name: mart_monthly
+    description: "Monthly customer activity metrics aggregated by geographic location"
+    columns:
+      - name: customer_state
+        description: "Customer's state location"
+        data_tests:
+          - not_null
+      - name: customer_city
+        description: "Customer's city location"
+        data_tests:
+          - not_null
+      - name: month_start_date
+        description: "Start date of the month when customer activity occurred"
+        data_tests:
+          - not_null
+      - name: date_granulation
+        description: "Granularity level identifier - 'monthly'"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['monthly']
+      - name: active_users_count
+        description: "Number of unique customers active in this location during this month"
+        data_tests:
+          - not_null
+      - name: order_created_count
+        description: "Total number of orders created in this location during this month"
+        data_tests:
+          - not_null
+      - name: order_done_count
+        description: "Total number of orders completed in this location during this month"
+        data_tests:
+          - not_null
+      - name: total_payment_value_sum
+        description: "Total payment amount across all orders for this location and month"
+        data_tests:
+          - not_null
+      - name: voucher_value_sum
+        description: "Total voucher value used in this location during this month"
+        data_tests:
+          - not_null
+      - name: net_payment_value
+        description: "Total payment value minus voucher discounts (actual monthly revenue)"
+        data_tests:
+          - not_null
