@@ -1,6 +1,3 @@
-# models/semantic_models/customer_activity.yml
-version: 2
-
 semantic_models:
   - name: customer_activity
     model: ref('int_customer_daily_activity')
@@ -8,51 +5,45 @@ semantic_models:
       Customer daily activity semantic model for Brazilian e-commerce platform.
       Each row represents customer activity aggregated by day, including order counts,
       payment values, and geographic information.
-    
     defaults:
       agg_time_dimension: activity_date
     
     entities:
       - name: customer_unique_id
         type: primary
-        expr: customer_unique_id
-        description: "Unique customer identifier across all orders"
-      
+
       - name: customer_id
         type: foreign
-        expr: customer_id
-        description: "Customer ID for specific orders"
     
     dimensions:
-      - name: metric_time
-        type: time
-        expr: activity_date
-        type_params:
-          time_granularity: day
-        description: "Date when customer activity occurred (mapped to activity_date)"
-      
       - name: activity_date
         type: time
-        expr: activity_date
         type_params:
           time_granularity: day
         description: "Date when customer activity occurred"
       
-      - name: customer_state
+      - name: state
         type: categorical
         expr: customer_state
         description: "Customer's state location for geographic analysis"
       
-      - name: customer_city
+      - name: city
         type: categorical
         expr: customer_city
         description: "Customer's city location for detailed geographic analysis"
-    
+
+      - name: is_order_done
+        type: categorical
+        expr: case when order_done_count > 0 then true else false end
+        description: "Customer with order done"
+
     measures:
       - name: unique_customers
         agg: count_distinct
         expr: customer_unique_id
         description: "Count of distinct active customers"
+        # non_additive_dimension:
+        #   name: 
         label: "Active Users"
       
       - name: total_payment_value
@@ -61,8 +52,3 @@ semantic_models:
         description: "Sum of total payment values across all customer orders"
         label: "Total Payments"
       
-      - name: voucher_value
-        agg: sum
-        expr: voucher_value_sum
-        description: "Sum of voucher values used by customers"
-        label: "Voucher Value"

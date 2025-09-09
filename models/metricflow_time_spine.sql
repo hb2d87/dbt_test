@@ -1,26 +1,26 @@
--- models/metricflow_time_spine.sql
 {{
-    config(
-        materialized='table'
-    )
+  config(
+    materialized = 'table',
+  )
 }}
 
-with spine as (
-    {{
-        dbt.date_spine(
-            'day',
-            "DATE('2016-01-01')",
-            "DATE('2030-01-01')"
-        )
-    }}
+with
+base_dates as (
+  {{
+    dbt.date_spine(
+      'day',
+      "DATE('2016-01-01')",
+      "DATE('2030-12-31')"
+    )
+  }}
 ),
-
 final as (
-    select 
-        cast(date_day as date) as activity_date
-    from spine
-    where date_day >= current_date - interval '8 years'
-      and date_day < current_date + interval '2 years'
+  select
+    cast(date_day as date) as date_day
+  from base_dates
 )
 
-select * from final
+select *
+from final
+where date_day > current_date - interval '9 years'
+  and date_day < current_date + interval '6 months'

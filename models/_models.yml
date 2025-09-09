@@ -1,14 +1,13 @@
-# models/_models.yml (or add to existing models YAML file)
-version: 2
-
 models:
   - name: metricflow_time_spine
-    description: "Time spine model for Brazilian e-commerce data with activity_date column. MetricFlow will automatically support day, week, month, quarter, and year granularities."
-    
-    time_spine:
-      standard_granularity_column: activity_date
-      
+    description: "MetricFlow time spine table for metric calculations"
+    meta:
+      time_spine:
+        standard_granularity_column: date_day
     columns:
-      - name: activity_date
-        description: "Primary date column - MetricFlow derives all other granularities from this daily grain"
-        granularity: day
+      - name: date_day
+        description: "Date dimension for MetricFlow time spine"
+        data_type: date
+        tests:
+          - not_null
+          - unique

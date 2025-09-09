@@ -1,0 +1,84 @@
+# metrics:
+#   - name: metric name                     ## Required
+#     description: description               ## Optional
+#     type: the type of the metric          ## Required
+#     type_params:                          ## Required
+#       - specific properties for the metric type
+#     config:                               ## Optional
+#       meta:
+#         my_meta_config:  'config'         ## Optional
+#     label: The display name for your metric. This value will be shown in downstream tools. ## Required
+#     filter: |                             ## Optional            
+#       {{  Dimension('entity__name') }} > 0 and {{ Dimension(' entity__another_name') }} is not
+#       null and {{ Metric('metric_name', group_by=['entity_name']) }} > 5
+# Still maybe we need not to group it, but rather create different files for each metric for better control and versioning
+
+metrics:
+  - name: user_activity
+    description: "Count of distinct active users"
+    type: simple
+    label: "Active Users"
+    type_params:
+      measure: unique_customers
+    config:
+      meta:
+        metric_level: 1
+        business_purpose: "Track user engagement across all time periods for Brazilian e-commerce platform"
+        business_impact: "High - Core KPI for user engagement and product performance"
+        kpi_type: "North Star Metric"
+        responsible: "Product Analytics Team"
+        accountable: "VP of Product"
+        consulted: ["Marketing Team", "Customer Success Team"]
+        informed: ["Executive Team", "Regional Managers", "Customer Support"]
+
+        
+  - name: user_with_done_order_activity
+    description: "Count of distinct active users"
+    type: simple
+    label: "Active Users with Order Done"
+    type_params:
+      measure: unique_customers
+    filter: |
+      {{ Dimension('customer_unique_id__is_order_done') }} = true
+    config:
+      meta:
+        metric_level: 2
+        owner: "Business"
+        business_purpose: "Track active users with order done count"
+        comment: "we still can extract it all on external table and use whenever we want"
+
+  - name: total_payment_value
+    description: "Sum of total payment values"
+    type: simple
+    label: "Total Payments"
+    type_params:
+      measure: total_payment_value
+    config:
+      meta:
+        metric_level: 1
+        business_purpose: "Track revenue performance"
+        business_impact: "Critical - Primary revenue metric for financial operations"
+        kpi_type: "Financial KPI"
+        calculation_logic: "Sum of all successful payments received on transaction date"
+        responsible: "Finance Analytics Team"
+        accountable: "CFO"
+        consulted: ["Revenue Operations", "Accounting Team", "Tax Team"]
+        informed: ["CEO", "Board of Directors", "Regional Sales Managers", "Investor Relations"]
+        format: "in brazilian peso currency"
+
+  - name: user_success_rate
+    description: "Ratio of user with order done versus all users with activity"
+    type: ratio
+    label: user_success_rate
+    type_params:
+      numerator: user_with_done_order_activity
+      denominator: user_activity
+    config:
+      meta:
+        metric_level: 3
+        business_purpose: "Metrics that is important, but nobody want to be responsible. So just for keks"
+        business_impact: "Critical - But no one cares"
+        kpi_type: "Trying to get to"
+        calculation_logic: "Count distinct of users with succesfully done orders / Count distinct all users with orders"
+        responsible: "no one"
+        format: "percentage"
