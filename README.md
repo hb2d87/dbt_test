@@ -15,7 +15,7 @@ To properly experiment with dbt Semantic Layer (e.g. play and learn) I have:
 ### Conclusion:
 It's really great concept that potentially should cover a big chunk of DQ&G work (if we will include additional meta info), ensure the Source of Truth, expedite analytics onboarding and work, reduce mistakes and potentially provide great self service tool for end clients (when we will solve informational security and data access policy). I have conversation with Serhan and he was really enthusiastic and told that he will provide support to push it further if needed.
 
-This README.md created by Claude Opus 4.1
+From this point README.md is written and created by Claude Opus 4.1
 ### Here’s a project overview focused on the semantic layer for the hb2d87/dbt_test repository:
 
 This project is a dbt-based analytics platform, with a strong emphasis on a robust semantic layer for the Brazilian E-commerce Analytics Platform. The semantic layer acts as a business-friendly interface to your data, ensuring metric definitions remain consistent across teams, tools, and dashboards.
