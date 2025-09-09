@@ -1,3 +1,6 @@
+This readme was created by Claude 4.1 and it's not helping at all, because based on depricated documentation and cannot create proper metrics 🤦‍♂️
+But it's good for description and filling meta :) 
+
 # Semantic Models Documentation
 
 ## Overview
@@ -209,4 +212,5 @@ WHERE orders_completion_rate_daily < 0.90  -- Below 90% threshold
 1. **Regular Reviews**: Quarterly metric relevance assessment
 2. **Stakeholder Engagement**: Monthly business user feedback
 3. **Quality Monitoring**: Continuous data quality tracking
+
 4. **Change Control**: Structured approval and communication process
