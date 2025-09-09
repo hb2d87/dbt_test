@@ -1,0 +1,13 @@
+models:
+  - name: metricflow_time_spine
+    description: "MetricFlow time spine table for metric calculations"
+    meta:
+      time_spine:
+        standard_granularity_column: date_day
+    columns:
+      - name: date_day
+        description: "Date dimension for MetricFlow time spine"
+        data_type: date
+        tests:
+          - not_null
+          - unique

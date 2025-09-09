@@ -1,0 +1,54 @@
+semantic_models:
+  - name: customer_activity
+    model: ref('int_customer_daily_activity')
+    description: |
+      Customer daily activity semantic model for Brazilian e-commerce platform.
+      Each row represents customer activity aggregated by day, including order counts,
+      payment values, and geographic information.
+    defaults:
+      agg_time_dimension: activity_date
+    
+    entities:
+      - name: customer_unique_id
+        type: primary
+
+      - name: customer_id
+        type: foreign
+    
+    dimensions:
+      - name: activity_date
+        type: time
+        type_params:
+          time_granularity: day
+        description: "Date when customer activity occurred"
+      
+      - name: state
+        type: categorical
+        expr: customer_state
+        description: "Customer's state location for geographic analysis"
+      
+      - name: city
+        type: categorical
+        expr: customer_city
+        description: "Customer's city location for detailed geographic analysis"
+
+      - name: is_order_done
+        type: categorical
+        expr: case when order_done_count > 0 then true else false end
+        description: "Customer with order done"
+
+    measures:
+      - name: unique_customers
+        agg: count_distinct
+        expr: customer_unique_id
+        description: "Count of distinct active customers"
+        # non_additive_dimension:
+        #   name: 
+        label: "Active Users"
+      
+      - name: total_payment_value
+        agg: sum
+        expr: total_payment_value_sum
+        description: "Sum of total payment values across all customer orders"
+        label: "Total Payments"
+      
