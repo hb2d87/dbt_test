@@ -11,8 +11,9 @@ To properly experiment with dbt Semantic Layer (e.g. play and learn) I have:
 -  5.3. Watch some YouTube video and understand the concept (basically it should replace Analytical Master Data later on)
 -  5.4. Make it work -- we are here --
 -  5.5. Connect to Google Sheet and Gemini LLM for Text-to-SQL
-Conclusion:
-It's really great concept that potentially should cover a big chunk of DQ&G work, ensure the Source of Truth, expedite analytics onboarding and work, reduce mistakes and potentially provide great self service tool for end clients (when we will solve informational security and data access policy). I have conversation with Serhan and he was really enthusiastic and told that he will provide support to push it further if needed.
+
+### Conclusion:
+It's really great concept that potentially should cover a big chunk of DQ&G work (if we will include additional meta info), ensure the Source of Truth, expedite analytics onboarding and work, reduce mistakes and potentially provide great self service tool for end clients (when we will solve informational security and data access policy). I have conversation with Serhan and he was really enthusiastic and told that he will provide support to push it further if needed.
 
 This README.md created by Claude Opus 4.1
 ### Here’s a project overview focused on the semantic layer for the hb2d87/dbt_test repository:
