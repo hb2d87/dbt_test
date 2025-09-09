@@ -16,12 +16,21 @@ semantic_models:
       - name: customer_unique_id
         type: primary
         expr: customer_unique_id
+        description: "Unique customer identifier across all orders"
       
       - name: customer_id
         type: foreign
         expr: customer_id
+        description: "Customer ID for specific orders"
     
     dimensions:
+      - name: metric_time
+        type: time
+        expr: activity_date
+        type_params:
+          time_granularity: day
+        description: "Date when customer activity occurred (mapped to activity_date)"
+      
       - name: activity_date
         type: time
         expr: activity_date

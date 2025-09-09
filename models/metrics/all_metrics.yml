@@ -1,0 +1,55 @@
+# models/metrics/all_metrics.yml
+version: 2
+
+metrics:
+  - name: user_activity
+    description: "Count of distinct active users"
+    type: simple
+    label: "Active Users"
+    type_params:
+      measure: unique_customers
+    
+    config:
+      meta:
+        owner: "Product Analytics Team"
+        business_purpose: "Track user engagement"
+
+  - name: total_payments
+    description: "Sum of total payment values"
+    type: simple
+    label: "Total Payments"
+    type_params:
+      measure: total_payment_value
+    
+    config:
+      meta:
+        owner: "Finance Analytics Team"
+        business_purpose: "Track revenue performance"
+        format: "currency"
+
+  - name: voucher_value
+    description: "Sum of voucher values used"
+    type: simple
+    label: "Voucher Value"
+    type_params:
+      measure: voucher_value
+    
+    config:
+      meta:
+        owner: "Marketing Analytics Team"
+        business_purpose: "Track promotional discount usage"
+        format: "currency"
+
+  - name: voucher_adoption_rate
+    description: "Percentage of transactions using vouchers"
+    type: ratio
+    label: "Voucher Adoption Rate"
+    type_params:
+      numerator: voucher_value
+      denominator: total_payments
+    
+    config:
+      meta:
+        owner: "Marketing Analytics Team"
+        business_purpose: "Measure promotional campaign effectiveness"
+        format: "percentage"
